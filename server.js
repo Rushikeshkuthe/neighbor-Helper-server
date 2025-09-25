@@ -60,7 +60,14 @@ io.on('connection', (socket) => {
     };
     await db.collection('messages').insertOne(newMsg);
 
-   socket.broadcast.emit('receive_message', data);
+    io.to(data.to).emit('receive_message', newMsg);
+     io.to(data.sender).emit('receive_message', newMsg);
+  //  socket.broadcast.emit('receive_message', data);
+  });
+
+  socket.on('register_user', (userId) => {
+    socket.join(userId);
+    console.log(`User ${userId} registered with socket ID ${socket.id}`);
   });
 
   socket.on('disconnect', () => {

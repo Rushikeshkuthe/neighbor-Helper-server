@@ -8,8 +8,8 @@ async function messeging(req,res){
 
         const chat = await db.collection('messages').find({
             $or:[
-                {senderId:new ObjectId(userId) ,receiverId:new ObjectId(otherId)},
-                {senderId:new ObjectId(otherId),receiverId:new ObjectId(userId)}
+                {senderId:userId ,receiverId:otherId},
+                {senderId:otherId,receiverId:userId}
             ]
         }).sort({createdAt:1})
         .toArray()

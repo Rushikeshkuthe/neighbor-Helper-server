@@ -19,7 +19,10 @@ const defaultRoutes =[
     {
         path:'/task',
         route:taskRoute
-    },
+    },{
+        path:'/msg',
+        route:messageRoute
+    }
 
 ]
 

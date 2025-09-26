@@ -31,4 +31,23 @@ async function getTaskById(req,res){
             sendResponse(res,httpStatus.BAD_REQUEST,task.msg,null,null)
         }
 }
-module.exports = {taskCreate,getAllTask,getTaskById}
+
+async function acceptedTask(req,res){
+    const task = await taskService.acceptedTask(req)
+    if(task.status){
+        sendResponse(res,httpStatus.OK,task.msg,task.data,null)
+    }else{
+        sendResponse(res,httpStatus.BAD_REQUEST,task.msg,null,null)
+    }
+}
+
+async function getTaskbyAccepterId(req,res){
+    task = await taskService.getTaskbyAccepterId(req)
+    if(task.status){
+        sendResponse(res,httpStatus.OK,task.msg,task.data,null)
+    }else{
+        sendResponse(res,httpStatus.BAD_REQUEST,task.msg,null,null)
+    }
+}
+
+module.exports = {taskCreate,getAllTask,getTaskById,acceptedTask,getTaskbyAccepterId}

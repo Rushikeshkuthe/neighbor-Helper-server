@@ -41,6 +41,7 @@ async function createTask(req,res){
             msg:'Location required Required'
         }
     }
+    
 
 
     const authHeader = req.headers["authorization"]
@@ -66,6 +67,8 @@ async function createTask(req,res){
         username:username,
         location:location,
         address:address,
+        acceptedUserId:null,
+        status:null,
         createdAt:new Date()
     })
     
@@ -139,6 +142,74 @@ async function getTaskId(req){
     msg:"Task retrieved successfully",
     data:task
     }
-
 }
-module.exports={createTask,getAllTask,getTaskId}
+
+async function acceptedTask(req,res){
+   
+    try{
+        const taskId = req.params.id
+        const {acceptUserId} = req.body
+        const db= getDatabase()
+
+        const task = await db.collection('task').findOne({
+            _id:new ObjectId (taskId)
+        })
+
+        if(!task){
+            return{
+                status:false,
+                msg:"Task not found"
+            }
+        }
+        if(task.accepted){
+            return{
+                status:false,
+                msg:"Task already accepted"
+            }
+        }
+
+        const updatedTask= await db.collection('task').updateOne(
+            {_id:new ObjectId(taskId)},
+            {
+                $set:{
+                    acceptedUserId:new ObjectId(acceptUserId),
+                    status:'pending'
+                }
+            }
+        )
+        return{
+            status:true,
+            data:updatedTask,
+            msg:'Task accepted successfully'
+        }
+
+    }catch(error){
+        console.log(error)
+        return{
+            status:false
+        }
+    }
+  
+}
+
+ async function getTaskbyAccepterId(req){
+    try{
+        const {acceptUserId} = req.params
+        const db = getDatabase();
+        const tasks = await db.collection('task').find({acceptedUserId:new ObjectId(acceptUserId)}).toArray()
+        return{
+            status:true,
+            msg:"Task retrieved successfully",
+            data:tasks
+        }
+
+    }catch(error){
+        console.log(error)
+        return{
+            status:false,
+            msg:error.message
+        }
+    }
+ }
+
+module.exports={createTask,getAllTask,getTaskId,acceptedTask,getTaskbyAccepterId}

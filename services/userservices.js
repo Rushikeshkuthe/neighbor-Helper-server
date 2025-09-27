@@ -64,7 +64,7 @@ async function register(req, res) {
                     amount: 100,
                     description: 'wallet created',
                     taskTitle: "Initial Registeration Bonus",
-                    txnDate: new Date(),
+                    date: new Date(),
 
                 }
 

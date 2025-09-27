@@ -4,5 +4,6 @@ const walletController = require ('../controller/walletController')
 
 
 router.get('/getWalletById/:userId',walletController.getwalletbyId)
+router.put('/makePayment',walletController.makePayment)
 
 module.exports = router

@@ -148,7 +148,7 @@ async function acceptedTask(req,res){
    
     try{
         const taskId = req.params.id
-        const {acceptUserId} = req.body
+        const {acceptUserId } = req.body
         const db= getDatabase()
 
         const task = await db.collection('task').findOne({
@@ -173,7 +173,7 @@ async function acceptedTask(req,res){
             {
                 $set:{
                     acceptedUserId:new ObjectId(acceptUserId),
-                    status:'pending'
+                    status:req.body.status||'pending'
                 }
             }
         )
